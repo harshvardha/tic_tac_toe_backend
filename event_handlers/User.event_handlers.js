@@ -7,15 +7,32 @@ const readyToPlay = (socket, data) => {
         const playerObj = new Player(data.username, socket, true);
         let roomId = RoomManager.latestRoomId
         if (roomId !== "") {
-            console.log("joining existing room");
             socket.join(roomId);
+            playerObj.setSide("o");
             RoomManager.joinRoom(roomId, playerObj);
+            RoomManager.latestRoomId = "";
+            const players = RoomManager.rooms[roomId].getPlayers();
+            const playersInfo = {
+                1: {
+                    username: players[1].username,
+                    side: players[1].side
+                },
+                2: {
+                    username: players[2].username,
+                    side: players[2].side
+                }
+            }
+
+            // sending 'joined-room' event to room with 'roomId' except this socket
+            socket.to(roomId).emit("game-starting", playersInfo);
+            socket.emit("joined-room", playersInfo);
         }
         else {
-            console.log("creating new room");
             roomId = data.username + socket.id;
             socket.join(roomId);
-            RoomManager.createRoom(roomId, playerObj)
+            playerObj.setSide("x");
+            RoomManager.createRoom(roomId, playerObj);
+            socket.emit("created-room", { message: "waiting for opponent" });
         }
     } catch (error) {
         console.log(error);

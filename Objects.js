@@ -18,15 +18,15 @@ const RoomManager = {
             if (!room) {
                 throw Error("room does not exist.");
             }
-            const noOfPlayers = Object.keys(room.players).length;
-            if (noOfPlayers >= 2) {
-                throw Error("You cannot join already occupied room.");
-            }
-            room.players[noOfPlayers + 1] = playerObj;
+            room.addPlayer(playerObj);
         } catch (error) {
             console.log(error);
         }
     }
+}
+
+const GameManager = {
+
 }
 
 module.exports = {
