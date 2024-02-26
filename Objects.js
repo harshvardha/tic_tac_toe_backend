@@ -1,4 +1,5 @@
 const { Room } = require("./classes/Room");
+const { Game } = require("./classes/Game");
 
 const RoomManager = {
     latestRoomId: "",
@@ -19,14 +20,14 @@ const RoomManager = {
                 throw Error("room does not exist.");
             }
             room.addPlayer(playerObj);
+            if (room.getNoOfPlayers() === 2) {
+                const game = new Game();
+                room.setGameObj(game);
+            }
         } catch (error) {
             console.log(error);
         }
     }
-}
-
-const GameManager = {
-
 }
 
 module.exports = {
