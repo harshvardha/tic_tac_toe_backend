@@ -9,6 +9,7 @@ const readyToPlay = (socket, data) => {
         if (roomId !== "") {
             socket.join(roomId);
             playerObj.setSide("o");
+            playerObj.setMyChance(false);
             RoomManager.joinRoom(roomId, playerObj);
             RoomManager.latestRoomId = "";
             const players = RoomManager.rooms[roomId].getPlayers();
@@ -31,9 +32,19 @@ const readyToPlay = (socket, data) => {
             roomId = data.username + socket.id;
             socket.join(roomId);
             playerObj.setSide("x");
+            playerObj.setMyChance(true);
             RoomManager.createRoom(roomId, playerObj);
             socket.emit("created-room", { message: "waiting for opponent" });
         }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// event handler for event: 'disconnect'
+const onDisconnect = (socket) => {
+    try {
+
     } catch (error) {
         console.log(error);
     }
