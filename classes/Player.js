@@ -3,6 +3,7 @@ class Player {
     socket;
     online;
     side;
+    myChance;
 
     constructor(username, socket) {
         this.username = username;
@@ -19,6 +20,10 @@ class Player {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    setMyChance(boolValue) {
+        this.myChance = boolValue;
     }
 }
 
