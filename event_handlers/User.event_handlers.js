@@ -44,12 +44,17 @@ const readyToPlay = (socket, data) => {
 // event handler for event: 'disconnect'
 const onDisconnect = (socket) => {
     try {
-
+        const roomId = Array.from(socket.rooms)[1];
+        socket.to(roomId).emit("opponent-disconnected");
+        let roomsArray = Object.entries(RoomManager.rooms);
+        roomsArray = roomsArray.filter(([key, value]) => key !== roomId);
+        RoomManager.rooms = Object.fromEntries(roomsArray);
     } catch (error) {
         console.log(error);
     }
 }
 
 module.exports = {
-    readyToPlay
+    readyToPlay,
+    onDisconnect
 }
